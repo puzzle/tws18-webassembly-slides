@@ -65,6 +65,15 @@ title: WebAssembly
 * Can compile practically any portable C/C++ code
 * Support for SDL and OpenGL ES 2.0
 * Support for OpenAL
+* Focused on portability
+
+---
+
+## NodeJS WebAssembly Package
+
+* C/C++ to Wasm compiler
+* Targeting Wasm in browsers only
+* Minimal boilerplate code
 
 ---
 
@@ -105,7 +114,19 @@ Integer signed/unsigned determined by operators.
 
 ---
 
-## WebAssembly Hello World
+## WebAssembly Use Cases
+
+* Improve load times of web apps
+* Implement web apps in other languages than JS
+* Run CPU bound workloads in browsers
+* Use existing C/C++, Java, ... libraries in browsers
+* Run same binaries on different IoT devices
+
+Also see: https://webassembly.org/docs/use-cases/
+
+---
+
+## WebAssembly "Hello, World!"
 
 ```c
 // hello.c
@@ -121,13 +142,13 @@ export void hello() {
 
 ---
 
-## WebAssembly Hello World
+## WebAssembly "Hello, World!"
 
 ```javascript
 // hello.js
 
 function printMessage(message) {
-    document.getElementById("message").innerHTML = message
+    document.getElementById("message").innerHTML = message;
 }
 
 var importObject = {
@@ -138,13 +159,26 @@ var importObject = {
 };
 
 WebAssembly.instantiateStreaming(
-    fetch('build/hello.wasm'), importObject)
+    fetch('wasm/hello.wasm'), importObject)
         .then(module => { module.instance.exports.hello() });
 ```
 
 ---
 
-## WebAssembly Hello World
+## WebAssembly "Hello, World!"
+
+```bash
+git clone https://github.com/puzzle/wasm-hello
+cd wasm-hello
+docker run --rm -it -p 8080:8080 -v `pwd`:/src node:8 /bin/bash
+cd /src
+npm install
+npx gulp
+```
+
+---
+
+## WebAssembly "Hello, World!"
 
 ```webassembly
 ;; hello.wasm (generated)
@@ -164,7 +198,7 @@ WebAssembly.instantiateStreaming(
 
 ---
 
-## What to test
+## Look at some Demos
 
 Look at some demos:
 
@@ -173,10 +207,65 @@ Look at some demos:
 * http://s3.amazonaws.com/mozilla-games/tmp/2017-02-21-SunTemple/SunTemple.html
 * http://blog.qt.io/blog/2018/05/22/qt-for-webassembly-examples/
 
-https://developer.mozilla.org/en-US/docs/WebAssembly
+---
 
-* [WebAssembly Reference Manual](https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md)
+## Study and Modify
 
+* https://webassembly.org/docs/high-level-goals/
+* https://github.com/puzzle/wasm-hello
+* https://github.com/puzzle/wasm-java
+
+---
+
+## Try Emscripten "Hello, World!"
+
+```bash
+mkdir hello
+cd hello
+cat << EOF > hello.c
+#include <stdio.h>
+int main(int argc, char ** argv) {
+  printf("Hello, world!\n");
+}
+EOF
+
+docker run --rm -it -p 8080:8080 -v `pwd`:/src \
+    trzeci/emscripten:1.38.12 /bin/bash
+emcc hello.c -s WASM=1 -o hello.html
+emrun --no_browser --hostname 0.0.0.0 --port 8080 .
+```
+
+Then visit http://localhost:8080/hello.html.
+
+---
+
+## Try "Weel of WebAssembly"
+
+```bash
+git clone https://github.com/boyanio/wasm-wheel
+cd wasm-wheel
+docker run --rm -it -p 8080:8080 -v `pwd`:/src \
+    quay.io/dtschan/wasm-wheel /bin/bash
+npx gulp build-metadata build-wasm-folder build-wasm-assemblyscript \
+    build-wasm-c build-wasm-java build-wasm-go
+npx gulp serve
+```
+
+Then visit http://localhost:8080/.
+
+---
+
+## Research
+
+* How are strings handled in the different examples?
+* How does Go handle garbage collection in Wasm?
+
+
+---
+
+## Try Yourself
+
+---
 
 ## wasm-wheel
 
@@ -186,3 +275,7 @@ https://developer.mozilla.org/en-US/docs/WebAssembly
 npm install
 gulp build-metadata build-wasm-folder build-wasm-assemblyscript build-wasm-c build-wasm-java build-wasm-go
 gulp serve
+
+## References
+
+* [WebAssembly Reference Manual](https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md)
