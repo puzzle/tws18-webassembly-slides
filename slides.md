@@ -1,11 +1,16 @@
 ---
-title: WebAssembly
+title: WebAssembly Mini Workshop
 ---
 
-<!--section -->
-# WebAssembly
-
 <!-- .slide: class="master01" -->
+
+# WebAssembly<br>Mini Workshop
+
+---
+
+<!-- .slide: class="master02" -->
+
+# Overview
 
 ---
 
@@ -15,7 +20,7 @@ title: WebAssembly
 * Bytecode for browsers
 * Compilation target for C/C++ and other languages
 * LLVM backend
-* Binary and text representation
+* Compressed binary and text representation
 
 ---
 
@@ -49,7 +54,17 @@ title: WebAssembly
 
 ---
 
-## Why is WebAssembly faster than asm.js
+## asm.js
+
+* Low-level subset of JavaScript
+* Limited to ahead-of-time optimizable features
+* Compilation target for C/C++ and other languages
+* asm.js optimizations in some browser
+* Performance inconsistent accross browsers
+
+---
+
+### Why is WebAssembly faster than asm.js?
 
 * Much faster parsing due to binary format
 * Better support for modern CPU features
@@ -120,17 +135,23 @@ Integer signed/unsigned determined by operators.
 * Implement web apps in other languages than JS
 * Run CPU bound workloads in browsers
 * Use existing C/C++, Java, ... libraries in browsers
+* Hybrid native mobile apps
 * Run same binaries on different IoT devices
 
 Also see: https://webassembly.org/docs/use-cases/
 
 ---
 
+<!-- .slide: class="master02" -->
+
+# Actual Code
+
+---
+
 ## WebAssembly "Hello, World!"
 
+<span style="display: block; text-align:left;margin: 2.5rem auto -1rem auto; width: 90%;">hello.c:</span>
 ```c
-// hello.c
-
 #include <webassembly.h>
 
 extern void printMessage(int);
@@ -144,9 +165,8 @@ export void hello() {
 
 ## WebAssembly "Hello, World!"
 
+<span style="display: block; text-align:left;margin: 2.5rem auto -1rem auto; width: 90%;">hello.js:</span>
 ```javascript
-// hello.js
-
 function printMessage(message) {
     document.getElementById("message").innerHTML = message;
 }
@@ -167,6 +187,7 @@ WebAssembly.instantiateStreaming(
 
 ## WebAssembly "Hello, World!"
 
+<span style="display: block; text-align:left;margin: 2.5rem auto -1rem auto; width: 90%;">Compile:</span>
 ```bash
 git clone https://github.com/puzzle/wasm-hello
 cd wasm-hello
@@ -180,9 +201,8 @@ npx gulp
 
 ## WebAssembly "Hello, World!"
 
-```webassembly
-;; hello.wasm (generated)
-
+<span style="display: block; text-align:left;margin: 2.5rem auto -1rem auto; width: 90%;">hello.wasm (generated):</span>
+```wasm
 (module
   (type $t0 (func (param i32)))
   (type $t1 (func))
@@ -198,22 +218,52 @@ npx gulp
 
 ---
 
-## Look at some Demos
+<!-- .slide: class="master02" -->
 
-Look at some demos:
-
-* https://www.funkykarts.rocks/demo.html
-* https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html
-* http://s3.amazonaws.com/mozilla-games/tmp/2017-02-21-SunTemple/SunTemple.html
-* http://blog.qt.io/blog/2018/05/22/qt-for-webassembly-examples/
+# Do it Yourself
 
 ---
 
-## Study and Modify
+## Look at some Demos
 
-* https://webassembly.org/docs/high-level-goals/
-* https://github.com/puzzle/wasm-hello
-* https://github.com/puzzle/wasm-java
+* [Funky Karts](https://www.funkykarts.rocks/demo.html)
+* [Epic Zen Garden](https://s3.amazonaws.com/mozilla-games/ZenGarden/EpicZenGarden.html)
+* [Sun Temple](http://s3.amazonaws.com/mozilla-games/tmp/2017-02-21-SunTemple/SunTemple.html)
+* [Qt for WebAssembly Examples](http://blog.qt.io/blog/2018/05/22/qt-for-webassembly-examples/)
+
+---
+
+## Study
+
+* [WebAssembly Documentation](https://webassembly.org/docs/high-level-goals/)
+* [Mozilla WebAssembly Documentation](https://developer.mozilla.org/en-US/docs/WebAssembly)
+* [Awesome Wasm](https://github.com/mbasso/awesome-wasm)
+* [Awesome WebAssembly Languages](https://github.com/appcypher/awesome-wasm-langs)
+* [WebAssembly Reference Manual](https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md)
+
+---
+
+## Try and Modify
+
+* [WebAssembly "Hello, World!" in C](https://github.com/puzzle/wasm-hello)
+* [WebAssembly "Hello, World!" in Java](https://github.com/puzzle/wasm-java)
+* [Wheel of WebAssembly](https://github.com/boyanio/wasm-wheel), also see next slide
+
+---
+
+## Try "Weel of WebAssembly"
+
+```bash
+git clone https://github.com/boyanio/wasm-wheel
+cd wasm-wheel
+docker run --rm -it -p 8080:8080 -v `pwd`:/src \
+    quay.io/dtschan/wasm-wheel /bin/bash
+npx gulp build-metadata build-wasm-folder build-wasm-assemblyscript \
+    build-wasm-c build-wasm-java build-wasm-go
+npx gulp serve
+```
+
+Then visit http://localhost:8080/.
 
 ---
 
@@ -239,43 +289,15 @@ Then visit http://localhost:8080/hello.html.
 
 ---
 
-## Try "Weel of WebAssembly"
-
-```bash
-git clone https://github.com/boyanio/wasm-wheel
-cd wasm-wheel
-docker run --rm -it -p 8080:8080 -v `pwd`:/src \
-    quay.io/dtschan/wasm-wheel /bin/bash
-npx gulp build-metadata build-wasm-folder build-wasm-assemblyscript \
-    build-wasm-c build-wasm-java build-wasm-go
-npx gulp serve
-```
-
-Then visit http://localhost:8080/.
-
----
-
 ## Research
 
+* Do the WebAssembly demos/examples run on my mobile?
 * How are strings handled in the different examples?
 * How does Go handle garbage collection in Wasm?
-
-
----
-
-## Try Yourself
+* How to extend [this Dockerfile](https://github.com/dtschan/wasm-wheel/blob/docker/docker/Dockerfile) to get the Kotlin example working
 
 ---
 
-## wasm-wheel
+<!-- .slide: class="master02" -->
 
-* https://github.com/boyanio/wasm-wheel
-
-# mkdir build/wasm
-npm install
-gulp build-metadata build-wasm-folder build-wasm-assemblyscript build-wasm-c build-wasm-java build-wasm-go
-gulp serve
-
-## References
-
-* [WebAssembly Reference Manual](https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md)
+# Discover WebAssembly Yourself
