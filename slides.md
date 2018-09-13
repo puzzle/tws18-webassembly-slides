@@ -256,8 +256,10 @@ npx gulp
 ```bash
 git clone https://github.com/boyanio/wasm-wheel
 cd wasm-wheel
+git checkout d626ffc
 docker run --rm -it -p 8080:8080 -v `pwd`:/src \
     quay.io/dtschan/wasm-wheel /bin/bash
+npm install
 npx gulp build-metadata build-wasm-folder build-wasm-assemblyscript \
     build-wasm-c build-wasm-java build-wasm-go
 npx gulp serve
