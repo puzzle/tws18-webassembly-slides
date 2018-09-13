@@ -282,7 +282,7 @@ int main(int argc, char ** argv) {
 EOF
 
 docker run --rm -it -p 8080:8080 -v `pwd`:/src \
-    trzeci/emscripten:1.38.12 /bin/bash
+    trzeci/emscripten /bin/bash
 emcc hello.c -s WASM=1 -o hello.html
 emrun --no_browser --hostname 0.0.0.0 --port 8080 .
 ```
