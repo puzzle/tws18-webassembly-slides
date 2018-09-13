@@ -246,7 +246,7 @@ npx gulp
 ## Try and Modify
 
 * [WebAssembly "Hello, World!" in C](https://github.com/puzzle/wasm-hello)
-* [WebAssembly "Hello, World!" in Java](https://github.com/puzzle/wasm-java)
+* [WebAssembly "Hello, World!" in Java](https://github.com/puzzle/wasm-hello-java)
 * [Wheel of WebAssembly](https://github.com/boyanio/wasm-wheel), also see next slide
 
 ---
